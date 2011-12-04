@@ -13,6 +13,12 @@ body {
 	font-size: 14px;
 	text-align: center;
 }
+#container_header {
+	position: relative;
+	width: 1129px;
+	height: 100px;
+	background-color: purple;
+}
 #container_top {
 	position: relative;
 	width: 1129px;
@@ -24,6 +30,17 @@ body {
 }
 #container_bottom {
 	
+}
+#button_save {
+	position: relative;
+	float: right;
+	width: 70px;
+	height: 40px;
+	background-color: brown;
+	line-height: 40px;
+	top: 30px;
+	right: 30px;
+	cursor: pointer;
 }
 .table_header {
 	position: relative;
@@ -42,4 +59,14 @@ body {
 	float: left;
 	line-height: 50px;
 	cursor: pointer;
+}
+#view_status {
+	position: relative;
+	float: right;
+	width: 200px;
+	height: 40px;
+	background-color: green;
+	line-height: 40px;
+	top: 30px;
+	right: 30px;
 }

@@ -14,10 +14,45 @@ var DB = function() {
 			callback(data);
 		});
 	}
+	
+	function _saveTeacherView(values, callback) {
+		for (var x = 0; x < values.length; x++) {
+			saveView(values[x], x, values.length, callback);
+			//console.log(values[x]["id"]);
+		}
+		
+		function saveView(_values, current_index, length, _callback) {
+			$.get('php/server.php', {
+				'function'     : 'saveTeacherView',
+				performance_id : _values['id'],
+				absent         : _values['absent'],
+				disrespectful  : _values['disrespectful'],
+				disruptive     : _values['disruptive'],
+				insight        : _values['insight'],
+				late           : _values['late'],
+				missing        : _values['missing'],
+				participation  : _values['participation'],
+				persistence    : _values['persistence'],
+				teamwork       : _values['teamwork']
+			}, function(data) {
+				//console.log(data);
+				if(current_index + 1 == length) {
+					console.log("Update");
+					_callback('Update Saved');
+				}
+			});
+		}
+	}
 
 	return {
 		populateTeacherView : function(school, teacher, period, callback) {
 			_polulateTeacherView(school, teacher, period, callback);
+		},
+		saveTeacherView : function(values, callback) {
+			//console.log(values);
+			//console.log(callback);
+			//callback('HI');
+			_saveTeacherView(values, callback);
 		}
 };
 	

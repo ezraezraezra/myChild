@@ -18,13 +18,8 @@ var TEACHER_VIEW = function() {
 	
 	function mouseListener() {
 		$("#container_middle").delegate(".table_entry", "click", function() {
-		//$table_entry.click(function() {
-			//console.log("hi");
-			//console.log($table_entry.hasClass('entry_positive'));
 			if($(this).hasClass('entry_positive') == true) {
-				//console.log($table_entry.css("backgroundColor"));
 				if($(this).css("backgroundColor").indexOf('rgba(0, 0, 0, 0)') != -1) {
-					//console.log("TRUE");
 					$(this).css("backgroundColor", "rgba(0, 192, 0, 100)");
 				}
 				else {
@@ -33,14 +28,62 @@ var TEACHER_VIEW = function() {
 			}
 			else if($(this).hasClass('entry_negative') == true) {
 				if($(this).css("backgroundColor").indexOf('rgba(0, 0, 0, 0)') != -1) {
-					//console.log("TRUE");
 					$(this).css("backgroundColor", "rgba(255, 0, 0, 100)");
 				}
 				else {
 					$(this).css("backgroundColor", "rgba(0, 0, 0, 0)");
 				}
-			}	
+			}
+			
+			updateSave('Update Not Saved');	
 		});
+		
+		$("#container_header").delegate('#button_save', 'click', function() {
+			updateSave('Updating Server...');
+			
+			gatherCurrentValues();
+			// Update db
+			
+		});
+	}
+	
+	function gatherCurrentValues() {
+		var values = new Array();
+		$(".table_row").each(function(table_row_index) {
+			console.log("Table_row: "+table_row_index);
+			values[table_row_index] = new Array();
+			var id;
+			$(this).children().each(function(index) {
+				var temp_array = $(this).attr('id').split("_");
+				if($(this).attr('id').indexOf('first') != -1 || $(this).attr('id').indexOf('last') != -1) {
+					id = temp_array[2];
+					console.log("This is performance id: "+ id);
+				}
+				else {
+					//console.log(temp_array);
+					//console.log($(this).attr('id'));
+					//console.log($(this).css("backgroundColor"));
+					 if($(this).css("backgroundColor").indexOf('rgba(0, 0, 0, 0)') != -1) {
+						 values[table_row_index][temp_array[1]] = 0;
+					 }
+					 else {
+						 values[table_row_index][temp_array[1]] = 1;
+					 }
+				}
+				values[table_row_index]['id'] = id; 
+				
+			});
+			
+			//split_id = $(this).
+			//values[index] = new Array();
+			//values[index]['participation'] = $('#entry_participation_')
+		});
+		console.log(values);
+		DB.saveTeacherView(values, function() {updateSave('Update Saved')});
+	}
+	
+	function updateSave(status) {
+		$('#view_status').html(status);
 	}
 	
 	function loadData(school, teacher, period) {
@@ -85,7 +128,7 @@ var TEACHER_VIEW = function() {
 			shortcut = data.results[x];
 			id = shortcut.performance_id;
 			
-			setColor(shortcut.absent, $('#entry_absent_'+id), 'positive');
+			setColor(shortcut.absent, $('#entry_absent_'+id), 'negative');
 			setColor(shortcut.creativity, $('#entry_creativity_'+id), 'positive');
 			setColor(shortcut.disrespectful, $('#entry_disrespectful_'+id), 'negative');
 			setColor(shortcut.disruptive, $('#entry_disruptive_'+id), 'negative');

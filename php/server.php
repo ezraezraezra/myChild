@@ -38,6 +38,20 @@ class Server {
 		}
 	}
 	
+	function saveTeacherView($id, $absent, $creativity, $disrespectful, $disruptive, $insight, $late, $missing, $participation, $persistence, $teamwork) {
+		$request_string = "UPDATE final_performance SET 
+							participation = '$participation', teamwork = '$teamwork', creativity = '$creativity', 
+							insight = '$insight', persistance = '$persistence', disruptive = '$disruptive', 
+							missing_work = '$missing', disrespectful = '$disrespectful', late = '$late', absent = '$absent' 
+							WHERE id='$id'";
+		$request = $this->submit_info($request_string, $this->connection, true);
+		
+		$arr = array('status'=>'200');
+		$output = json_encode($arr);
+		
+		return $output;
+	}
+	
 	function populateTeacherView($school, $teacher, $period) {
 		$request_string = "SELECT student.first_name, student.last_name, performance.id AS performance_id, performance.participation, performance.creativity, performance.teamwork, performance.persistance, performance.insight, performance.disruptive, performance.missing_work, performance.late, performance.absent, performance.disrespectful 
 FROM final_student AS student, final_period AS period, final_period_X_student AS period_X_student, final_performance AS performance, final_student_X_performance AS student_X_performance, final_teacher_X_period AS teacher_X_period, final_school_X_teacher AS school_X_teacher, final_school AS school, final_teacher AS teacher 
@@ -75,6 +89,9 @@ $server->startApp();
 	switch($function) {
 		case 'populateTeacherView':
 			echo $server->populateTeacherView($_GET['school'], $_GET['teacher'], $_GET['period']);
+			break;
+		case 'saveTeacherView':
+			echo $server->saveTeacherView($_GET['performance_id'], $_GET['absent'], $_GET['creativity'], $_GET['disrespectful'], $_GET['disruptive'], $_GET['insight'], $_GET['late'], $_GET['missing'], $_GET['participation'], $_GET['persistence'], $_GET['teamwork']);
 			break;
 	}
 //}
