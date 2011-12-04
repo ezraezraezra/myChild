@@ -1,0 +1,45 @@
+body {
+}
+
+#container {
+	position: relative;
+	width: 1129px;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	background-color: grey;
+	font-family: "Lucida Grande";
+	font-size: 14px;
+	text-align: center;
+}
+#container_top {
+	position: relative;
+	width: 1129px;
+	height: 30px;
+	background-color: green;
+}
+#container_middle {
+	
+}
+#container_bottom {
+	
+}
+.table_header {
+	position: relative;
+	width: 94px;
+	float: left;
+	line-height: 30px;
+}
+.table_row {
+	position: relative;
+	width: 1129px;
+	height: 50px;
+}
+.table_entry {
+	position: relative;
+	width: 94px;
+	float: left;
+	line-height: 50px;
+	cursor: pointer;
+}
