@@ -43,6 +43,25 @@ var DB = function() {
 			});
 		}
 	}
+	
+	function _registerParent(number, id, values) {
+		$.get('php/server.php', {
+			'function'     : 'registerParent',
+			student_id     : id,
+			absent         : values['absent'],
+			disrespectful  : values['disrespectful'],
+			disruptive     : values['disruptive'],
+			insight        : values['insight'],
+			late           : values['late'],
+			missing        : values['missing'],
+			participation  : values['participation'],
+			persistence    : values['persistence'],
+			teamwork       : values['teamwork'],
+			creativity     : values['creativity']
+		}, function(data) {
+			console.log(data);
+		});
+	}
 
 	return {
 		populateTeacherView : function(school, teacher, period, callback) {
@@ -53,6 +72,10 @@ var DB = function() {
 			//console.log(callback);
 			//callback('HI');
 			_saveTeacherView(values, callback);
+		},
+		registerParent : function(number, id, values) {
+			console.log("register parent called");
+			_registerParent(number, id, values);
 		}
 };
 	

@@ -76,6 +76,10 @@ AND teacher.name = '$teacher' AND school.name = '$school' AND period.class = '$p
 		$output = json_encode($arr);
 		return $output;
 	}
+	
+	function registerParent($number, $id, $participation, $disruptive, $creativity, $late, $teamwork, $missing, $persistence, $absent, $insight, $disrespectful) {
+		
+	}
 }
 
 $function = $_GET['function'];
@@ -92,6 +96,14 @@ $server->startApp();
 			break;
 		case 'saveTeacherView':
 			echo $server->saveTeacherView($_GET['performance_id'], $_GET['absent'], $_GET['creativity'], $_GET['disrespectful'], $_GET['disruptive'], $_GET['insight'], $_GET['late'], $_GET['missing'], $_GET['participation'], $_GET['persistence'], $_GET['teamwork']);
+			break;
+		case 'registerParent':
+			echo $server->
+		// $arr = array('status'=>'400');
+// 		
+		// $output = json_encode($arr);
+		// echo $output;
+			
 			break;
 	}
 //}
