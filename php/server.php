@@ -78,7 +78,14 @@ AND teacher.name = '$teacher' AND school.name = '$school' AND period.class = '$p
 	}
 	
 	function registerParent($number, $id, $participation, $disruptive, $creativity, $late, $teamwork, $missing, $persistence, $absent, $insight, $disrespectful) {
+		$request_string = "INSERT INTO final_parent (number, student_id, participation, creativity, teamwork, persistance, insight, disruptive, late, missing_work, absent, disrespectful) VALUES('$number', '$id', '$participation', '$creativity', '$teamwork', '$persistence', '$insight', '$disruptive', '$late', '$missing', '$absent', '$disrespectful')";
 		
+		$request = $this->submit_info($request_string, $this->connection, true);
+		
+		$arr = array('status'=>'200');
+		$output = json_encode($arr);
+		
+		return $output;
 	}
 }
 
@@ -98,12 +105,7 @@ $server->startApp();
 			echo $server->saveTeacherView($_GET['performance_id'], $_GET['absent'], $_GET['creativity'], $_GET['disrespectful'], $_GET['disruptive'], $_GET['insight'], $_GET['late'], $_GET['missing'], $_GET['participation'], $_GET['persistence'], $_GET['teamwork']);
 			break;
 		case 'registerParent':
-			echo $server->
-		// $arr = array('status'=>'400');
-// 		
-		// $output = json_encode($arr);
-		// echo $output;
-			
+			echo $server->registerParent($_GET['number'], $_GET['student_id'], $_GET['participation'], $_GET['disruptive'], $_GET['creativity'], $_GET['late'], $_GET['teamwork'], $_GET['missing'], $_GET['persistence'], $_GET['absent'], $_GET['insight'], $_GET['disrespectful']);
 			break;
 	}
 //}

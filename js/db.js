@@ -47,6 +47,7 @@ var DB = function() {
 	function _registerParent(number, id, values) {
 		$.get('php/server.php', {
 			'function'     : 'registerParent',
+			number         : number,
 			student_id     : id,
 			absent         : values['absent'],
 			disrespectful  : values['disrespectful'],
