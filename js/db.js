@@ -44,10 +44,10 @@ var DB = function() {
 		}
 	}
 	
-	function _registerParent(number, id, values) {
+	function _registerParent(number, id, values, callback) {
 		$.get('php/server.php', {
 			'function'     : 'registerParent',
-			number         : number,
+			'number'         : number,
 			student_id     : id,
 			absent         : values['absent'],
 			disrespectful  : values['disrespectful'],
@@ -61,6 +61,7 @@ var DB = function() {
 			creativity     : values['creativity']
 		}, function(data) {
 			console.log(data);
+			callback();
 		});
 	}
 
@@ -74,9 +75,9 @@ var DB = function() {
 			//callback('HI');
 			_saveTeacherView(values, callback);
 		},
-		registerParent : function(number, id, values) {
+		registerParent : function(number, id, values, callback) {
 			console.log("register parent called");
-			_registerParent(number, id, values);
+			_registerParent(number, id, values, callback);
 		}
 };
 	

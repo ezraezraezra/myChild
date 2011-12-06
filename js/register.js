@@ -28,8 +28,15 @@ var REGISTER_VIEW = function() {
 		});
 		
 		$('#button_submit').click(function() {
-			DB.registerParent($('#user_number').val(), $('#user_student_id').val(), options);
+			console.log($('#user_number').val());
+			DB.registerParent($('#user_number').val(), $('#user_student_id').val(), options, registrationComplete);
+			$('#container_middle').html("Registering...").css({textAlign : 'center', lineHeight : '150px'});
+			$('#container_bottom').html("");
 		});
+	}
+	
+	function registrationComplete() {
+		$('#container_middle').html("Thank you for registering.<br/> To see your son/daughter's progress, TXT 'myChild' to 415-599-2671.");
 	}
 	
 	

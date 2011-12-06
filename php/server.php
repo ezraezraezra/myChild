@@ -1,6 +1,8 @@
 <?php
 header('Content-type: application/json; charset=utf-8');
 include 'info.php';
+include 'sms.php';
+
 class Server {
 	
 	var $connection;
@@ -85,7 +87,41 @@ AND teacher.name = '$teacher' AND school.name = '$school' AND period.class = '$p
 		$arr = array('status'=>'200');
 		$output = json_encode($arr);
 		
+		$sms_app = new SMS($this->info_object->AccountSid, $this->info_object->AuthToken);
+		$sms_app->confirmRegistration($number);
+		
 		return $output;
+	}
+	
+	function sendReport($number) {
+		$request_string = "SELECT * FROM final_parent WHERE number = '$number'";
+		$request = $this->submit_info($request_string, $this->connection, true);
+		
+		while(($rows[] = mysql_fetch_assoc($request)) || array_pop($rows));
+		$counter = 0;
+		foreach ($rows as $row):
+			$result[$counter] = array('number'=>"{$row['number']}", 'student_id'=>"{$row['student_id']}", 'participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
+			$counter = $counter + 1;
+		endforeach;
+		
+		// A match was found
+		if($counter > 0) {
+			$counter = $counter - 1;
+			$student_id = $result[$counter]['student_id'];
+			
+			// All results
+			$request_string = "SELECT performance.participation, performance.teamwork, performance.creativity, performance.insight, performance.persistance, performance.disruptive, performance.missing_work, performance.disrespectful, performance.late, performance.absent FROM final_student AS student, final_performance AS performance, final_student_X_performance AS student_X_performance, final_parent AS parent WHERE student_X_performance.student_id = student.id AND student_X_performance.performance_id = performance.id AND parent.student_id = student.id AND student.id = '1' LIMIT 0, 1";
+			$request = $this->submit_info($request_string, $this->connection, true);
+			
+			while(($rows[] = mysql_fetch_assoc($request)) || array_pop($rows));
+			$counter = 0;
+			foreach ($rows as $row):
+				$result[$counter] = array('number'=>"{$row['number']}", 'student_id'=>"{$row['student_id']}", 'participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
+				$counter = $counter + 1;
+			endforeach;
+			
+			// TODO ONLY NEED THE ONES PARENT WANTS FILTER THEM OUT HERE
+		}
 	}
 }
 
