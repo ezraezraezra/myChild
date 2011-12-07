@@ -81,3 +81,69 @@ body {
 	top: 30px;
 	right: 30px;
 }
+#phase_one {
+	position: relative;
+	display: block;
+	width: 1129px;
+	height: 400px;
+	background-color: brown;
+}
+#login_screen {
+	position: relative;
+	top: 80px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 400px;
+	height: 250px;
+	background-color: #01A2A6;
+	text-align: center;
+	padding-top: 30px;
+}
+#login_header {
+	position: relative;
+	font-size: 24px;
+	top: 40px;
+}
+#button_login {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	width: 150px;
+	height: 50px;
+	background-color:#008000;
+	line-height: 50px;
+	font-size: 20px;
+	cursor: pointer;
+}
+#login_teacher {
+	position: relative;
+	font-size: 16px;
+}
+#login_pin {
+	position: relative;
+	font-size: 16px;
+}
+#phase_two {
+	position: relative;
+	display: none;
+}
+#class_picker {
+	position: relative;
+	width: 500px;
+	height: 50px;
+	background-color: #2489CE;
+	margin-left: 40px;
+	top: 25px;
+}
+.button_class {
+	position: relative;
+	float: left;
+	width: 100px;
+	height: 50px;
+	margin-right: 2px;
+	background-color:#44996F;
+	line-height: 45px;
+	cursor: pointer;	
+}

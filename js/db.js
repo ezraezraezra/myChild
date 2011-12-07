@@ -75,6 +75,31 @@ var DB = function() {
 			callback();
 		});
 	}
+	
+	function _loginTeacher(teacher, password, _callback) {
+		console.log("it got this far");
+		console.log(teacher);
+		console.log(password);
+		//_callback('mets', 'randolph', '2');
+		$.get('php/server.php', {
+			'function'    : 'loginTeacher',
+			'teacher'     : teacher,
+			'password'    : password
+		}, function(data) {
+			if(data.status.indexOf('200') != -1) {
+				var classes = new Array();
+				var school;
+				for(var x = 0; x < data.results.length; x++) {
+					if(data.results[x].class_period != "") {
+						classes.push(data.results[x].class_period);
+						school = data.results[x].name;
+					}
+				}
+				_callback(school, teacher, classes);
+				//_callback(school, teacher, classes[0]);
+			}
+		});
+	}
 
 	return {
 		populateTeacherView : function(school, teacher, period, callback) {
@@ -89,6 +114,10 @@ var DB = function() {
 		registerParent : function(number, id, values, callback) {
 			console.log("register parent called");
 			_registerParent(number, id, values, callback);
+		},
+		loginTeacher : function(teacher, password, callback) {
+			console.log("login teacher");
+			_loginTeacher(teacher, password, callback);
 		}
 };
 	

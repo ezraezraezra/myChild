@@ -17,6 +17,8 @@ var TEACHER_VIEW = function() {
 	
 	var $table_entry;
 	var $table_row;
+	var _school = "";
+	var _teacher = "";
 	
 	function setup() {
 		$table_entry = $(".table_entry");
@@ -55,6 +57,17 @@ var TEACHER_VIEW = function() {
 			gatherCurrentValues();
 			// Update db
 			
+		});
+		
+		$("#phase_one").delegate("#button_login", 'click', function() {
+			loginTeacher($('#login_teacher').val(), $('#login_pin').val());
+		});
+		
+		$("#class_picker").delegate(".button_class", 'click', function() {
+			console.log(_school);
+			console.log(_teacher);
+			console.log($(this).attr('id').split("_")[1]);
+			loadData("" + _school, "" + _teacher, "" + $(this).attr('id').split("_")[1]);
 		});
 	}
 	
@@ -97,6 +110,10 @@ var TEACHER_VIEW = function() {
 		$('#view_status').html(status);
 	}
 	
+	function loginTeacher(teacher, password) {
+		DB.loginTeacher(teacher, password, createDisplay);//loadData);
+	}
+	
 	function loadData(school, teacher, period) {
 		DB.populateTeacherView(school, teacher, period, displayData);
 	}
@@ -105,9 +122,31 @@ var TEACHER_VIEW = function() {
 		console.log(result);
 	}
 	
+	function createDisplay(school, teacher, periods) {
+		_school = school;
+		_teacher = teacher;
+		loadData(school, teacher, periods[0]);
+		displayClassButtons(periods);
+	}
+	
+	function displayClassButtons(periods) {
+		console.log("DISPLAY CLASS BUTTONS");
+		var class_display = "";
+		for(var x = 0; x < periods.length; x++) {
+			class_display += '<div class="button_class" id="class_'+ periods[x]+'">Class '+ periods[x] +'</div>';
+		}
+		
+		$('#class_picker').html(class_display);
+	}
+	
 	function displayData(data) {
+		console.log("HEY");
+		console.log(data);
 		var display = '';
 		var id = '';
+		
+		$('#phase_one').css('display', 'none');
+		$('#phase_two').css('display', 'block');
 		
 		for(var x = 0; x < data.total; x++) {
 			id = data.results[x].performance_id;
@@ -178,7 +217,7 @@ var TEACHER_VIEW = function() {
 	$(document).ready(function() {
 		setup();
 		mouseListener();
-		loadData('mets', 'randolph', '2');
+		//loadData('mets', 'randolph', '2');
 		
 	});
 }();

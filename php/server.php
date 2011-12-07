@@ -170,6 +170,44 @@ AND teacher.name = '$teacher' AND school.name = '$school' AND period.class = '$p
 		//return $output;
 		
 	}
+
+	function loginTeacher($teacher, $password) {
+		$request_string = "SELECT id FROM final_teacher WHERE name = '$teacher' AND password = '$password'";
+		$request = $this->submit_info($request_string, $this->connection, true);
+		
+		while(($rows[] = mysql_fetch_assoc($request)) || array_pop($rows));
+		$counter = 0;
+		foreach ($rows as $row):
+			$teacher_id = "{$row['id']}";
+			$counter = $counter + 1;
+		endforeach;
+		
+		if($counter >= 1) {
+			$status = '200';
+			
+			/**
+			 * TODO FIX BUG: First result is null
+			 */
+			
+			$request_string_new = "SELECT school.name AS school_name, period.class AS class_period FROM final_school_X_teacher AS school_X_teacher, final_school AS school, final_period AS period, final_teacher_X_period AS teacher_X_period WHERE school_X_teacher.teacher_id = '$teacher_id' AND school_X_teacher.school_id = school.id AND teacher_X_period.teacher_id = school_X_teacher.teacher_id AND teacher_X_period.period_id = period.id";
+			$request_new = $this->submit_info($request_string_new, $this->connection, true);
+			$counter_inner = 0;
+			while(($rows[] = mysql_fetch_assoc($request_new)) || array_pop($rows));
+			foreach ($rows as $row):
+				$result_teacher[$counter_inner] = array('name'=>"{$row['school_name']}", 'class_period'=>"{$row['class_period']}");
+				$counter_inner = $counter_inner + 1;
+			endforeach;
+			
+		}
+		else {
+			$status = '400';
+		}
+		
+		$arr = array('status'=>$status, 'results'=>$result_teacher);
+		$output = json_encode($arr);
+		
+		return $output;
+	}
 }
 
 
@@ -197,6 +235,9 @@ switch($function) {
 		break;
 	case 'sendReport':
 		echo $server->sendReport($from_number);
+		break;
+	case 'loginTeacher':
+		echo $server->loginTeacher($_GET['teacher'], $_GET['password']);
 		break;
 }
 
