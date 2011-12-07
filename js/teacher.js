@@ -2,6 +2,17 @@
  * @author Ezra Velazquez
  */
 
+/*
+ * Project:     myChild
+ * Description: Update parents on child's progress via SMS
+ * Website:     
+ * 
+ * Author:      Ezra Velazquez
+ * Website:     http://ezraezraezra.com
+ * Date:        December 2011
+ * 
+ */
+
 var TEACHER_VIEW = function() {
 	
 	var $table_entry;

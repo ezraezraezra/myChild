@@ -1,0 +1,19 @@
+/**********************************************************************
+ * Developer:   Ezra Velazquez http://ezraezraezra.com
+ * Class:       ITP - Mobile Technology
+ * 
+ * Date:        December 2011
+ *
+ * Title:       myChild     http://ezraezraezra.com
+ * Description: Update parents about child's progress at school
+ *              via SMS message.
+ *
+ * Tech:        AJAX, CSS, HTML, JavaScript, JSON, jQuery, 
+ *              MySQL, PHP, Twilio
+ * Last Update: December 6th, 2011
+ ***********************************************************************/
+ 
+ NOTE: *** 3rd PARTY LIBRARIES HAVE BEEN OMITTED FROM THE PUBLIC REPO ***
+ 
+ Libraries Omitted:  jQuery       http://jquery.com
+                     Twilio       http://twilio.com

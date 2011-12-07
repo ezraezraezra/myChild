@@ -3,6 +3,17 @@ header('Content-type: application/json; charset=utf-8');
 include 'info.php';
 include 'sms.php';
 
+/*
+ * Project:     myChild
+ * Description: Update parents on child's progress via SMS
+ * Website:     
+ * 
+ * Author:      Ezra Velazquez
+ * Website:     http://ezraezraezra.com
+ * Date:        December 2011
+ * 
+ */
+
 class Server {
 	
 	var $connection;
@@ -100,51 +111,96 @@ AND teacher.name = '$teacher' AND school.name = '$school' AND period.class = '$p
 		while(($rows[] = mysql_fetch_assoc($request)) || array_pop($rows));
 		$counter = 0;
 		foreach ($rows as $row):
-			$result[$counter] = array('number'=>"{$row['number']}", 'student_id'=>"{$row['student_id']}", 'participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
+			$result_parent = array('number'=>"{$row['number']}", 'student_id'=>"{$row['student_id']}", 'participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
 			$counter = $counter + 1;
 		endforeach;
 		
 		// A match was found
 		if($counter > 0) {
-			$counter = $counter - 1;
-			$student_id = $result[$counter]['student_id'];
+			//$counter = $counter - 1;
+			$student_id = $result_parent['student_id'];
 			
 			// All results
-			$request_string = "SELECT performance.participation, performance.teamwork, performance.creativity, performance.insight, performance.persistance, performance.disruptive, performance.missing_work, performance.disrespectful, performance.late, performance.absent FROM final_student AS student, final_performance AS performance, final_student_X_performance AS student_X_performance, final_parent AS parent WHERE student_X_performance.student_id = student.id AND student_X_performance.performance_id = performance.id AND parent.student_id = student.id AND student.id = '1' LIMIT 0, 1";
+			$request_string = "SELECT performance.participation, performance.teamwork, performance.creativity, performance.insight, performance.persistance, performance.disruptive, performance.missing_work, performance.disrespectful, performance.late, performance.absent FROM final_student AS student, final_performance AS performance, final_student_X_performance AS student_X_performance, final_parent AS parent WHERE student_X_performance.student_id = student.id AND student_X_performance.performance_id = performance.id AND parent.student_id = student.id AND student.id = '$student_id' LIMIT 0, 1";
 			$request = $this->submit_info($request_string, $this->connection, true);
 			
 			while(($rows[] = mysql_fetch_assoc($request)) || array_pop($rows));
-			$counter = 0;
+			//$counter = 0;
 			foreach ($rows as $row):
-				$result[$counter] = array('number'=>"{$row['number']}", 'student_id'=>"{$row['student_id']}", 'participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
-				$counter = $counter + 1;
+				$result_student = array('participation'=>"{$row['participation']}", 'creativity'=>"{$row['creativity']}", 'teamwork'=>"{$row['teamwork']}", 'persistance'=>"{$row['persistance']}", 'insight'=>"{$row['insight']}", 'disruptive'=>"{$row['disruptive']}", 'missing_work'=>"{$row['missing_work']}", 'late'=>"{$row['late']}", 'absent'=>"{$row['absent']}", 'disrespectful'=>"{$row['disrespectful']}");
+				//$counter = $counter + 1;
 			endforeach;
 			
-			// TODO ONLY NEED THE ONES PARENT WANTS FILTER THEM OUT HERE
+			//ONLY NEED THE ONES PARENT WANTS FILTER THEM OUT HERE
+			$output_string = array();
+			
+			foreach($result_parent as $key => $value):
+				if($key != 'student_id' || $key != 'number') {
+					if($value == 1) {
+						$output_string[$key] = $result_student[$key];
+					}
+				}
+			endforeach;
+			
+			
+			$arr = array('status'=>'200');
+			$output = json_encode($arr);
+			$sms_response = "Your child status: ";
+			
+			foreach($output_string as $key => $value):
+				if($value == 1) {
+					$sms_response = $sms_response.$key.", ";
+				}
+			endforeach;
+			
+			$sms_response = rtrim($sms_response, ", ");
+			
 		}
+		else {
+			$arr = array('status'=>'400');
+			$output = json_encode($arr);
+			$sms_response = "myChild: This phone is not registered with this student";
+		}
+		
+		// RETURN
+		
+		$sms_app = new SMS($this->info_object->AccountSid, $this->info_object->AuthToken);
+		$sms_app->sendReport($number, $sms_response);
+		
+		//return $output;
+		
 	}
 }
 
-$function = $_GET['function'];
+
+if(isset($_REQUEST['From'])) {
+	$from_number = $_REQUEST['From'];
+	$function = 'sendReport';
+}
+else {
+	$function = $_GET['function'];
+}
 
 $server = new Server();
 $server->startApp();
-//methodToExecute($function);
 
 
-//function methodToExecute($function) {
-	switch($function) {
-		case 'populateTeacherView':
-			echo $server->populateTeacherView($_GET['school'], $_GET['teacher'], $_GET['period']);
-			break;
-		case 'saveTeacherView':
-			echo $server->saveTeacherView($_GET['performance_id'], $_GET['absent'], $_GET['creativity'], $_GET['disrespectful'], $_GET['disruptive'], $_GET['insight'], $_GET['late'], $_GET['missing'], $_GET['participation'], $_GET['persistence'], $_GET['teamwork']);
-			break;
-		case 'registerParent':
-			echo $server->registerParent($_GET['number'], $_GET['student_id'], $_GET['participation'], $_GET['disruptive'], $_GET['creativity'], $_GET['late'], $_GET['teamwork'], $_GET['missing'], $_GET['persistence'], $_GET['absent'], $_GET['insight'], $_GET['disrespectful']);
-			break;
-	}
-//}
+switch($function) {
+	case 'populateTeacherView':
+		echo $server->populateTeacherView($_GET['school'], $_GET['teacher'], $_GET['period']);
+		break;
+	case 'saveTeacherView':
+		echo $server->saveTeacherView($_GET['performance_id'], $_GET['absent'], $_GET['creativity'], $_GET['disrespectful'], $_GET['disruptive'], $_GET['insight'], $_GET['late'], $_GET['missing'], $_GET['participation'], $_GET['persistence'], $_GET['teamwork']);
+		break;
+	case 'registerParent':
+		echo $server->registerParent($_GET['number'], $_GET['student_id'], $_GET['participation'], $_GET['disruptive'], $_GET['creativity'], $_GET['late'], $_GET['teamwork'], $_GET['missing'], $_GET['persistence'], $_GET['absent'], $_GET['insight'], $_GET['disrespectful']);
+		break;
+	case 'sendReport':
+		echo $server->sendReport($from_number);
+		break;
+}
+
+
 $server->closeApp();
 
 ?>
