@@ -6,9 +6,10 @@ include 'sms.php';
 /*
  * Project:     myChild
  * Description: Update parents on child's progress via SMS
- * Website:     
+ * Website:     http://ezraezraezra.com/mt/myChild
  * 
  * Author:      Ezra Velazquez
+ * Manager:     Lyel Resner
  * Website:     http://ezraezraezra.com
  * Date:        December 2011
  * 

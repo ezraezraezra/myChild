@@ -1,16 +1,17 @@
 /**********************************************************************
  * Developer:   Ezra Velazquez http://ezraezraezra.com
+ * Manager:     Lyel Resner
  * Class:       ITP - Mobile Technology
  * 
  * Date:        December 2011
  *
- * Title:       myChild     http://ezraezraezra.com
+ * Title:       myChild     http://ezraezraezra.com/mt/myChild
  * Description: Update parents about child's progress at school
  *              via SMS message.
  *
  * Tech:        AJAX, CSS, HTML, JavaScript, JSON, jQuery, 
  *              MySQL, PHP, Twilio
- * Last Update: December 6th, 2011
+ * Last Update: December 11th, 2011
  ***********************************************************************/
  
  NOTE: *** 3rd PARTY LIBRARIES HAVE BEEN OMITTED FROM THE PUBLIC REPO ***

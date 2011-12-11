@@ -4,9 +4,10 @@ body {
 /*
  * Project:     myChild
  * Description: Update parents on child's progress via SMS
- * Website:     
+ * Website:     http://ezraezraezra.com/mt/myChild
  * 
  * Author:      Ezra Velazquez
+ * Manager:     Lyel Resner
  * Website:     http://ezraezraezra.com
  * Date:        December 2011
  * 
@@ -18,7 +19,7 @@ body {
 	margin-right: auto;
 	width: 200px;
 	height: 50px;
-	background-color: brown;
+	background-color: #A52A2A;
 	cursor: pointer;
 	line-height: 50px;
 	text-align: center;
@@ -36,7 +37,7 @@ body {
 	position: relative;
 	width: 800px;
 	height: 70px;
-	background-color: grey;
+	background-color: #C0C0C0;
 	text-align: center;
 }
 #header_text {
@@ -95,6 +96,6 @@ body {
 	padding: 10px;
 	text-align: center;
 	margin: 3px;
-	background-color: grey;
+	background-color: #C0C0C0;
 	cursor: pointer;
 }
